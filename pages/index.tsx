@@ -14,7 +14,7 @@ export default function Home() {
 				{chirpIds.map((id) => (
 					<>
 						<Chirp chirpId={id} key={id} />
-						<Divider />
+						<Divider key={id} />
 					</>
 				))}
 			</Stack>
