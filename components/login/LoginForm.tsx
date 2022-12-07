@@ -24,21 +24,23 @@ const LoginForm = (props: Props) => {
 			}}
 		>
 			<Form>
-				<Stack alignItems={"center"}>
-					<Input variant="filled" placeholder="Username" size={"lg"} mb={4} />
-					<InputGroup size={"lg"}>
-						<Input
-							pr="4.5rem"
-							variant="filled"
-							type={show ? "text" : "password"}
-							placeholder="Password"
-						/>
-						<InputRightElement width="4.5rem">
-							<Button h="1.75rem" size="sm" onClick={handleClick}>
-								{show ? <HiEyeSlash /> : <HiEye />}
-							</Button>
-						</InputRightElement>
-					</InputGroup>
+				<Stack alignItems={"center"} gap={4}>
+					<Stack gap={2}>
+						<Input variant="filled" placeholder="Username" size={"lg"} />
+						<InputGroup size={"lg"}>
+							<Input
+								pr="4.5rem"
+								variant="filled"
+								type={show ? "text" : "password"}
+								placeholder="Password"
+							/>
+							<InputRightElement width="4.5rem">
+								<Button h="1.75rem" size="sm" onClick={handleClick}>
+									{show ? <HiEyeSlash /> : <HiEye />}
+								</Button>
+							</InputRightElement>
+						</InputGroup>
+					</Stack>
 
 					<Button colorScheme={"teal"} type={"submit"}>
 						Login

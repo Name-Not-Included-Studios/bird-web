@@ -1,4 +1,4 @@
-import { Box, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -8,31 +8,26 @@ type Props = {};
 
 const Login = (props: Props) => {
 	return (
-		<Box
+		<HStack
 			height={"100vh"}
 			width={"100%"}
-			display={"flex"}
 			alignItems="center"
 			justifyContent={"space-evenly"}
 			paddingX={10}
 			gap={10}
 		>
 			<Stack
-				width={"50%"}
-				height={"75%"}
-				padding={10}
+				width={["100%", "100%", "75%", "50%", "50%"]}
+				height={["100%", "100%", "75%", "75%", "75%"]}
+				padding={[0, 10, 10, 10, 10]}
 				alignItems={"center"}
-				justifyContent={"space-between"}
+				justifyContent={"space-evenly"}
 			>
-				<Heading size={"4xl"}>Bird Social</Heading>
-				<Text fontSize={"3xl"}>What&#39;s the word, bird?</Text>
-				<Stack
-					justifyContent={"space-evenly"}
-					alignItems={"center"}
-					flexDir={"column"}
-					h={"75%"}
-					w={"75%"}
-				>
+				<Box textAlign={"center"}>
+					<Heading size={"4xl"}>Bird Social</Heading>
+					<Text fontSize={"3xl"}>What&#39;s the word, bird?</Text>
+				</Box>
+				<Stack alignItems={"center"} flexDir={"column"} gap={6}>
 					<Heading>Login</Heading>
 					<LoginForm />
 				</Stack>
@@ -43,10 +38,11 @@ const Login = (props: Props) => {
 				position={"relative"}
 				borderRadius={"2xl"}
 				overflow={"hidden"}
+				display={["none", "none", "none", "flex", "flex"]}
 			>
 				<Image alt="Login image" fill src={"/img/fug.jpg"} />
 			</Stack>
-		</Box>
+		</HStack>
 	);
 };
 
