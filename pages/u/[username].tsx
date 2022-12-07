@@ -1,4 +1,5 @@
 import { Stack } from '@chakra-ui/react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -17,10 +18,10 @@ const Profile = (props: Props) => {
 	);
 };
 
-export async function getServerSideProps() {
-	const showPage = process.env.NODE_ENV !== "development";
+export const getServerSideProps: GetServerSideProps = async () => {
+	const isProduction = process.env.NODE_ENV === "production";
 
-	if (showPage) {
+	if (isProduction) {
 		return {
 			notFound: true,
 		};
@@ -29,6 +30,6 @@ export async function getServerSideProps() {
 	return {
 		props: {},
 	};
-}
+};
 
 export default Profile;
