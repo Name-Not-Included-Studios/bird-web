@@ -1,23 +1,9 @@
-import { Divider, Stack } from '@chakra-ui/react';
+import React from 'react';
 
-import Chirp from '../components/home/Chirp';
-import Compose from '../components/home/Compose';
-import { DefaultLayout } from '../components/layout/Layout';
+type Props = {};
 
-export default function Home() {
-	const chirpIds = ["fart", "poopoo", "id", "peepee", "burp", "sneeze"];
+const Home = (props: Props) => {
+	return <div>Home</div>;
+};
 
-	return (
-		<DefaultLayout>
-			<Stack direction={"column"} padding={10}>
-				<Compose />
-				{chirpIds.map((id) => (
-					<>
-						<Chirp chirpId={id} key={id} />
-						<Divider key={id} />
-					</>
-				))}
-			</Stack>
-		</DefaultLayout>
-	);
-}
+export default Home;

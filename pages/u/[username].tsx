@@ -17,4 +17,18 @@ const Profile = (props: Props) => {
 	);
 };
 
+export async function getServerSideProps() {
+	const showPage = process.env.NODE_ENV !== "development";
+
+	if (showPage) {
+		return {
+			notFound: true,
+		};
+	}
+
+	return {
+		props: {},
+	};
+}
+
 export default Profile;
