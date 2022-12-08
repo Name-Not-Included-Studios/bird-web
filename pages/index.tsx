@@ -15,6 +15,7 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { Formik } from 'formik';
 import { GetServerSideProps } from 'next';
 import React from 'react';
@@ -172,10 +173,20 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-	const res = await fetch("https://some-random-api.ml/animal/bird");
-	const json = await res.json();
-	const imageUrl = json.image;
-	const birdFact = json.fact;
+	const res = await axios.get("https://some-random-api.ml/animal/bird");
+
+	if (res.status > 299) {
+		return {
+			props: {
+				imageUrl: "https://i.some-random-api.ml/II2LKfO9Yb.png",
+				birdFact:
+					"The Australian pelican has the longest bill of any bird in the world. It is nearly 2 feet (0.5 m) in length. The sword-billed hummingbird, with its 3.9-inch (10 cm) bill, is the only bird with a bill that’s longer than its body.",
+			},
+		};
+	}
+
+	const imageUrl = res.data.image;
+	const birdFact = res.data.fact;
 
 	return {
 		props: {
