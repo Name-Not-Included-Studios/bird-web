@@ -45,7 +45,7 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 
 	useEffect(() => {
 		const getData = async () => {
-			if (birdData.imageUrl === "https://i.some-random-api.ml/II2LKfO9Yb.png")
+			if (birdData.imageUrl !== "https://i.some-random-api.ml/II2LKfO9Yb.png")
 				return;
 			const res = await axios.get("https://some-random-api.ml/animal/bird");
 
