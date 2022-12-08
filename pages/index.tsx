@@ -9,21 +9,26 @@ import {
     FormControl,
     FormErrorMessage,
     Heading,
+    Img,
     Input,
     Stack,
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
+import { GetServerSideProps } from 'next';
 import React from 'react';
 
-type Props = {};
+type Props = {
+	imageUrl: string;
+	birdFact: string;
+};
 
 interface EmailForm {
 	email?: string;
 }
 
-const Home = (props: Props) => {
+const Home = ({ birdFact, imageUrl }: Props) => {
 	const {
 		isOpen: isVisible,
 		onClose,
@@ -33,20 +38,34 @@ const Home = (props: Props) => {
 	const initialValues: EmailForm = { email: "" };
 
 	return (
-		<Stack alignItems={"center"} justifyContent={"center"} h={"100vh"}>
+		<Stack
+			alignItems={"center"}
+			justifyContent={"center"}
+			h={"100vh"}
+			w={"100%"}
+		>
 			<Stack
-				height={"60%"}
+				w={"100%"}
+				h={"80%"}
 				justifyContent={"space-evenly"}
 				alignItems={"center"}
 			>
 				<Stack alignItems={"center"}>
-					<Heading size={"4xl"}>Bird Social</Heading>
-					<Text fontSize={"3xl"} color={"GrayText"}>
+					<Box
+						boxSize={"3xs"}
+						alignItems={"center"}
+						justifyContent={"center"}
+						display={"flex"}
+					>
+						<Img src={imageUrl} alt="Bird Image" objectFit={"contain"} />
+					</Box>
+					<Heading size={["3xl", "4xl"]}>Bird Social</Heading>
+					<Text fontSize={["2xl", "3xl"]} color={"GrayText"}>
 						Squawk on, man!
 					</Text>
 				</Stack>
-				<Stack alignItems={"center"} gap={6} h={"50%"}>
-					<Heading size={"md"}>Get notified when we go live!</Heading>
+				<Stack alignItems={"center"} gap={6}>
+					<Heading size={["sm", "md"]}>Get notified when we go live!</Heading>
 					<Formik
 						initialValues={initialValues}
 						validate={(values) => {
@@ -88,7 +107,11 @@ const Home = (props: Props) => {
 							isSubmitting,
 						}) => (
 							<form onSubmit={handleSubmit}>
-								<Stack alignItems={"center"} gap={2} w={"sm"}>
+								<Stack
+									alignItems={"center"}
+									gap={2}
+									w={["2xs", "xs", "sm", "sm", "sm", "sm", "sm"]}
+								>
 									<FormControl
 										isInvalid={
 											errors.email && errors.email?.length > 0 ? true : false
@@ -146,6 +169,20 @@ const Home = (props: Props) => {
 			</Stack>
 		</Stack>
 	);
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+	const res = await fetch("https://some-random-api.ml/animal/bird");
+	const json = await res.json();
+	const imageUrl = json.image;
+	const birdFact = json.fact;
+
+	return {
+		props: {
+			imageUrl,
+			birdFact,
+		},
+	};
 };
 
 export default Home;
