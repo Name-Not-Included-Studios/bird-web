@@ -42,7 +42,7 @@ const Home = (props: Props) => {
 				<Stack alignItems={"center"}>
 					<Heading size={"4xl"}>Bird Social</Heading>
 					<Text fontSize={"3xl"} color={"GrayText"}>
-						Get your squawk on!
+						Squawk on, man!
 					</Text>
 				</Stack>
 				<Stack alignItems={"center"} gap={6} h={"50%"}>
