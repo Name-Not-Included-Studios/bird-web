@@ -17,8 +17,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { Formik } from 'formik';
-import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 type Props = {
 	imageUrl: string;
@@ -30,6 +29,12 @@ interface EmailForm {
 }
 
 const Home = ({ birdFact, imageUrl }: Props) => {
+	const [birdData, setBirdData] = useState<Props>({
+		imageUrl: "https://i.some-random-api.ml/II2LKfO9Yb.png",
+		birdFact:
+			"The Australian pelican has the longest bill of any bird in the world. It is nearly 2 feet (0.5 m) in length. The sword-billed hummingbird, with its 3.9-inch (10 cm) bill, is the only bird with a bill that’s longer than its body.",
+	});
+
 	const {
 		isOpen: isVisible,
 		onClose,
@@ -37,6 +42,23 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 	} = useDisclosure({ defaultIsOpen: false });
 
 	const initialValues: EmailForm = { email: "" };
+
+	useEffect(() => {
+		const getData = async () => {
+			if (birdData.imageUrl === "https://i.some-random-api.ml/II2LKfO9Yb.png")
+				return;
+			const res = await axios.get("https://some-random-api.ml/animal/bird");
+
+			if (res.status > 299) return;
+
+			setBirdData({
+				birdFact: res.data.fact,
+				imageUrl: res.data.image,
+			});
+		};
+
+		getData();
+	}, []);
 
 	return (
 		<Stack
@@ -58,7 +80,11 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 						justifyContent={"center"}
 						display={"flex"}
 					>
-						<Img src={imageUrl} alt="Bird Image" objectFit={"contain"} />
+						<Img
+							src={birdData.imageUrl}
+							alt="Bird Image"
+							objectFit={"contain"}
+						/>
 					</Box>
 					<Heading size={["3xl", "4xl"]}>Bird Social</Heading>
 					<Text fontSize={["2xl", "3xl"]} color={"GrayText"}>
@@ -172,28 +198,28 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-	const res = await axios.get("https://some-random-api.ml/animal/bird");
+// export const getServerSideProps: GetServerSideProps<Props> = async () => {
+// 	const res = await axios.get("https://some-random-api.ml/animal/bird");
 
-	if (res.status > 299) {
-		return {
-			props: {
-				imageUrl: "https://i.some-random-api.ml/II2LKfO9Yb.png",
-				birdFact:
-					"The Australian pelican has the longest bill of any bird in the world. It is nearly 2 feet (0.5 m) in length. The sword-billed hummingbird, with its 3.9-inch (10 cm) bill, is the only bird with a bill that’s longer than its body.",
-			},
-		};
-	}
+// 	if (res.status > 299) {
+// 		return {
+// 			props: {
+// 				imageUrl: "https://i.some-random-api.ml/II2LKfO9Yb.png",
+// 				birdFact:
+// 					"The Australian pelican has the longest bill of any bird in the world. It is nearly 2 feet (0.5 m) in length. The sword-billed hummingbird, with its 3.9-inch (10 cm) bill, is the only bird with a bill that’s longer than its body.",
+// 			},
+// 		};
+// 	}
 
-	const imageUrl = res.data.image;
-	const birdFact = res.data.fact;
+// 	const imageUrl = res.data.image;
+// 	const birdFact = res.data.fact;
 
-	return {
-		props: {
-			imageUrl,
-			birdFact,
-		},
-	};
-};
+// 	return {
+// 		props: {
+// 			imageUrl,
+// 			birdFact,
+// 		},
+// 	};
+// };
 
 export default Home;
