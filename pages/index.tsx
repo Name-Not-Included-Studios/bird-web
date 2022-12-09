@@ -17,10 +17,11 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { Formik } from 'formik';
+import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 
 type Props = {
-	imageUrl: string;
+	imageUrl?: string;
 	birdFact: string;
 };
 
@@ -30,7 +31,6 @@ interface EmailForm {
 
 const Home = ({ birdFact, imageUrl }: Props) => {
 	const [birdData, setBirdData] = useState<Props>({
-		imageUrl: "https://i.some-random-api.ml/II2LKfO9Yb.png",
 		birdFact:
 			"The Australian pelican has the longest bill of any bird in the world. It is nearly 2 feet (0.5 m) in length. The sword-billed hummingbird, with its 3.9-inch (10 cm) bill, is the only bird with a bill that’s longer than its body.",
 	});
@@ -45,8 +45,8 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 
 	useEffect(() => {
 		const getData = async () => {
-			if (birdData.imageUrl !== "https://i.some-random-api.ml/II2LKfO9Yb.png")
-				return;
+			if (birdData.imageUrl) return;
+
 			const res = await axios.get("https://some-random-api.ml/animal/bird");
 
 			if (res.status > 299) return;
@@ -58,7 +58,7 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 		};
 
 		getData();
-	}, []);
+	}, [birdData.imageUrl]);
 
 	return (
 		<Stack
@@ -67,6 +67,10 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 			h={"100vh"}
 			w={"100%"}
 		>
+			<Head>
+				<title>Bird Social</title>
+				<meta name="description" content="Squawk on, man!" />
+			</Head>
 			<Stack
 				w={"100%"}
 				h={"80%"}
@@ -80,11 +84,13 @@ const Home = ({ birdFact, imageUrl }: Props) => {
 						justifyContent={"center"}
 						display={"flex"}
 					>
-						<Img
-							src={birdData.imageUrl}
-							alt="Bird Image"
-							objectFit={"contain"}
-						/>
+						{birdData && birdData.imageUrl && (
+							<Img
+								src={birdData.imageUrl}
+								alt="Bird Image"
+								objectFit={"contain"}
+							/>
+						)}
 					</Box>
 					<Heading size={["3xl", "4xl"]}>Bird Social</Heading>
 					<Text fontSize={["2xl", "3xl"]} color={"GrayText"}>
