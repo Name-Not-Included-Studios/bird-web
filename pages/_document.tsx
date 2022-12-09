@@ -6,7 +6,8 @@ export default function Document() {
 		<Html lang="en">
 			<Head />
 			<body>
-				<ColorModeScript initialColorMode={"system"} />
+				{/* TODO: Change back to system for application releases */}
+				<ColorModeScript initialColorMode={"dark"} />
 				<Main />
 				<NextScript />
 			</body>

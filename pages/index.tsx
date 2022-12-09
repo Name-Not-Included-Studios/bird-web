@@ -9,21 +9,32 @@ import {
     FormControl,
     FormErrorMessage,
     Heading,
+    Img,
     Input,
     Stack,
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { Formik } from 'formik';
-import React from 'react';
+import Head from 'next/head';
+import React, { useEffect, useState } from 'react';
 
-type Props = {};
+type Props = {
+	imageUrl?: string;
+	birdFact: string;
+};
 
 interface EmailForm {
 	email?: string;
 }
 
-const Home = (props: Props) => {
+const Home = ({ birdFact, imageUrl }: Props) => {
+	const [birdData, setBirdData] = useState<Props>({
+		birdFact:
+			"The Australian pelican has the longest bill of any bird in the world. It is nearly 2 feet (0.5 m) in length. The sword-billed hummingbird, with its 3.9-inch (10 cm) bill, is the only bird with a bill that’s longer than its body.",
+	});
+
 	const {
 		isOpen: isVisible,
 		onClose,
@@ -32,21 +43,62 @@ const Home = (props: Props) => {
 
 	const initialValues: EmailForm = { email: "" };
 
+	useEffect(() => {
+		const getData = async () => {
+			if (birdData.imageUrl) return;
+
+			const res = await axios.get("https://some-random-api.ml/animal/bird");
+
+			if (res.status > 299) return;
+
+			setBirdData({
+				birdFact: res.data.fact,
+				imageUrl: res.data.image,
+			});
+		};
+
+		getData();
+	}, [birdData.imageUrl]);
+
 	return (
-		<Stack alignItems={"center"} justifyContent={"center"} h={"100vh"}>
+		<Stack
+			alignItems={"center"}
+			justifyContent={"center"}
+			h={"100vh"}
+			w={"100%"}
+		>
+			<Head>
+				<title>Bird Social</title>
+				<meta name="description" content="Squawk on, man!" />
+			</Head>
 			<Stack
-				height={"60%"}
+				w={"100%"}
+				h={"80%"}
 				justifyContent={"space-evenly"}
 				alignItems={"center"}
 			>
 				<Stack alignItems={"center"}>
-					<Heading size={"4xl"}>Bird Social</Heading>
-					<Text fontSize={"3xl"} color={"GrayText"}>
+					<Box
+						boxSize={"3xs"}
+						alignItems={"center"}
+						justifyContent={"center"}
+						display={"flex"}
+					>
+						{birdData && birdData.imageUrl && (
+							<Img
+								src={birdData.imageUrl}
+								alt="Bird Image"
+								objectFit={"contain"}
+							/>
+						)}
+					</Box>
+					<Heading size={["3xl", "4xl"]}>Bird Social</Heading>
+					<Text fontSize={["2xl", "3xl"]} color={"GrayText"}>
 						Squawk on, man!
 					</Text>
 				</Stack>
-				<Stack alignItems={"center"} gap={6} h={"50%"}>
-					<Heading size={"md"}>Get notified when we go live!</Heading>
+				<Stack alignItems={"center"} gap={6}>
+					<Heading size={["sm", "md"]}>Get notified when we go live!</Heading>
 					<Formik
 						initialValues={initialValues}
 						validate={(values) => {
@@ -88,7 +140,11 @@ const Home = (props: Props) => {
 							isSubmitting,
 						}) => (
 							<form onSubmit={handleSubmit}>
-								<Stack alignItems={"center"} gap={2} w={"sm"}>
+								<Stack
+									alignItems={"center"}
+									gap={2}
+									w={["2xs", "xs", "sm", "sm", "sm", "sm", "sm"]}
+								>
 									<FormControl
 										isInvalid={
 											errors.email && errors.email?.length > 0 ? true : false
@@ -147,5 +203,29 @@ const Home = (props: Props) => {
 		</Stack>
 	);
 };
+
+// export const getServerSideProps: GetServerSideProps<Props> = async () => {
+// 	const res = await axios.get("https://some-random-api.ml/animal/bird");
+
+// 	if (res.status > 299) {
+// 		return {
+// 			props: {
+// 				imageUrl: "https://i.some-random-api.ml/II2LKfO9Yb.png",
+// 				birdFact:
+// 					"The Australian pelican has the longest bill of any bird in the world. It is nearly 2 feet (0.5 m) in length. The sword-billed hummingbird, with its 3.9-inch (10 cm) bill, is the only bird with a bill that’s longer than its body.",
+// 			},
+// 		};
+// 	}
+
+// 	const imageUrl = res.data.image;
+// 	const birdFact = res.data.fact;
+
+// 	return {
+// 		props: {
+// 			imageUrl,
+// 			birdFact,
+// 		},
+// 	};
+// };
 
 export default Home;
