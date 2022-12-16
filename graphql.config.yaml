@@ -1,0 +1,14 @@
+schema:
+  - http://localhost:8080/graphql
+generates:
+  src/lib/__generated__/graphql.ts:
+    documents:
+      - "src/**/*.graphql"
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-query"
+    config:
+      fetcher:
+        func: "../graphql-fetcher#fetchData"
+        isReactHook: false

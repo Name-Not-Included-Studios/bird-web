@@ -1,0 +1,5 @@
+query GetApiStatus {
+	apiStatus {
+		version
+	}
+}
