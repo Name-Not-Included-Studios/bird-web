@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 
-import { connect } from '../../src/lib/mongo';
+import { connect } from '../../lib/mongo';
 
 interface Body {
 	email: string;

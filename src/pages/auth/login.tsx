@@ -1,7 +1,6 @@
 import { Box, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
-import { useState } from 'react';
 
 import LoginForm from '../../components/login/LoginForm';
 
