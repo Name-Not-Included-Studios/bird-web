@@ -1,7 +1,22 @@
-import { Button, Input, InputGroup, InputRightElement, Stack } from '@chakra-ui/react';
-import { Form, Formik } from 'formik';
-import { useState } from 'react';
-import { HiEye, HiEyeSlash } from 'react-icons/hi2';
+import {
+	Button,
+	Input,
+	InputGroup,
+	InputRightElement,
+	Stack,
+	Text,
+} from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
+import { useEffect, useState } from "react";
+import { HiEye, HiEyeSlash } from "react-icons/hi2";
+import * as Yup from "yup";
+
+import { useLoginMutation } from "../../lib/__generated__/graphql";
+
+const LoginSchema = Yup.object().shape({
+	email: Yup.string().email("Invalid email").required("Required!"),
+	password: Yup.string().min(8, "Too Short!").required("Required!"),
+});
 
 const initialValues = {
 	email: "",
@@ -11,42 +26,73 @@ const initialValues = {
 type Props = {};
 
 const LoginForm = (props: Props) => {
+	const { error, isLoading, mutateAsync } = useLoginMutation();
+
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
 
 	return (
 		<Formik
 			initialValues={initialValues}
-			onSubmit={(values, actions) => {
-				console.log({ values, actions });
-				alert(JSON.stringify(values, null, 2));
-				actions.setSubmitting(false);
+			validationSchema={LoginSchema}
+			onSubmit={async (values) => {
+				try {
+					await mutateAsync({
+						auth: {
+							email: values.email,
+							password: values.password,
+						},
+					});
+				} catch (error) {}
 			}}
 		>
-			<Form>
-				<Stack alignItems={"center"} gap={4}>
-					<Stack gap={2}>
-						<Input variant="filled" placeholder="Username" size={"lg"} />
-						<InputGroup size={"lg"}>
-							<Input
-								pr="4.5rem"
+			{({ errors, touched, isSubmitting }) => (
+				<Form>
+					<Stack alignItems={"center"} gap={4}>
+						<Stack gap={2}>
+							<Field
 								variant="filled"
-								type={show ? "text" : "password"}
-								placeholder="Password"
+								placeholder="Email"
+								size={"lg"}
+								as={Input}
+								name="email"
 							/>
-							<InputRightElement width="4.5rem">
-								<Button h="1.75rem" size="sm" onClick={handleClick}>
-									{show ? <HiEyeSlash /> : <HiEye />}
-								</Button>
-							</InputRightElement>
-						</InputGroup>
-					</Stack>
+							{errors.email && touched.email ? (
+								<Text variant={"error"}>{errors.email}</Text>
+							) : null}
+							<InputGroup size={"lg"}>
+								<Field
+									pr="4.5rem"
+									variant="filled"
+									type={show ? "text" : "password"}
+									placeholder="Password"
+									as={Input}
+									name="password"
+								/>
+								<InputRightElement width="4.5rem">
+									<Button h="1.75rem" size="sm" onClick={handleClick}>
+										{show ? <HiEyeSlash /> : <HiEye />}
+									</Button>
+								</InputRightElement>
+							</InputGroup>
+							{errors.password && touched.password ? (
+								<Text variant={"error"}>{errors.password}</Text>
+							) : null}
+						</Stack>
 
-					<Button colorScheme={"teal"} type={"submit"}>
-						Login
-					</Button>
-				</Stack>
-			</Form>
+						<Button
+							colorScheme={"teal"}
+							type={"submit"}
+							isLoading={isSubmitting}
+						>
+							Login
+						</Button>
+						{error && !isLoading ? (
+							<Text variant={"error"}>{error.toString()}</Text>
+						) : null}
+					</Stack>
+				</Form>
+			)}
 		</Formik>
 	);
 };

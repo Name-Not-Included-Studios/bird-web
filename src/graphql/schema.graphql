@@ -1,0 +1,229 @@
+mutation Login($auth: AuthInput!) {
+	login(auth: $auth) {
+		user {
+			userId
+			username
+			displayName
+			bio
+			websiteUrl
+			avatarUrl
+			chirpCount
+			followersCount
+			followingCount
+		}
+		access_token
+		refresh_token
+	}
+}
+
+mutation CreateAccount($auth: AuthInput!) {
+	createAccount(auth: $auth) {
+		user {
+			userId
+			username
+			displayName
+			bio
+			websiteUrl
+			avatarUrl
+			chirpCount
+			followersCount
+			followingCount
+		}
+		access_token
+		refresh_token
+	}
+}
+
+mutation UpdateUser($user: UserInput!) {
+	updateUser(user: $user) {
+		userId
+		username
+		displayName
+		bio
+		websiteUrl
+		avatarUrl
+		chirpCount
+		followersCount
+		followingCount
+	}
+}
+
+mutation DeleteUser {
+	deleteUser {
+		userId
+		username
+		displayName
+		bio
+		websiteUrl
+		avatarUrl
+		chirpCount
+		followersCount
+		followingCount
+	}
+}
+
+mutation CreatePost($post: PostInput!) {
+	createPost(post: $post) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}
+
+mutation DeletePost($postId: ID!) {
+	deletePost(postId: $postId) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}
+
+mutation AnnotatePost($postId: String!, $annotation: String!) {
+	annotatePost(postId: $postId, annotation: $annotation) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}
+
+mutation FollowUser($followerId: ID!) {
+	followUser(followerId: $followerId) {
+		userId
+		username
+		displayName
+		bio
+		websiteUrl
+		avatarUrl
+		chirpCount
+		followersCount
+		followingCount
+	}
+}
+
+mutation UnfollowUser($followerId: ID!) {
+	unfollowUser(followerId: $followerId) {
+		userId
+		username
+		displayName
+		bio
+		websiteUrl
+		avatarUrl
+		chirpCount
+		followersCount
+		followingCount
+	}
+}
+
+mutation LikePost($postId: ID!) {
+	likePost(postId: $postId) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}
+
+mutation UnlikePost($postId: ID!) {
+	unlikePost(postId: $postId) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}
+
+mutation UpdatePassword($oldPassword: String!, $newPassword: String!) {
+	updatePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
+		user {
+			userId
+			username
+			displayName
+			bio
+			websiteUrl
+			avatarUrl
+			chirpCount
+			followersCount
+			followingCount
+		}
+		access_token
+		refresh_token
+	}
+}
+
+query ApiVersion {
+	apiVersion
+}
+
+query SearchUsers($query: UserSearchCriteria!) {
+	searchUsers(query: $query) {
+		userId
+		username
+		displayName
+		bio
+		websiteUrl
+		avatarUrl
+		chirpCount
+		followersCount
+		followingCount
+	}
+}
+
+query GetMe {
+	getMe {
+		userId
+		username
+		displayName
+		bio
+		websiteUrl
+		avatarUrl
+		chirpCount
+		followersCount
+		followingCount
+	}
+}
+
+query GetAccessToken {
+	getAccessToken
+}
+
+query GetPost($postId: ID!) {
+	getPost(postId: $postId) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}
+
+query GetRecentPostsFromUser($userId: ID!, $page: Int!, $pageSize: Int!) {
+	getRecentPostsFromUser(userId: $userId, page: $page, pageSize: $pageSize) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}

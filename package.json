@@ -7,7 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"codegen": "graphql-codegen --config graphql.config.yaml --errors-only",
+		"codegen": "graphql-codegen --config graphql.config.yaml -v",
 		"c": "git add . && cz",
 		"p": "git add . && cz && git push origin"
 	},
@@ -19,7 +19,7 @@
 		"@types/node": "18.11.9",
 		"@types/react": "^18.0.25",
 		"@types/react-dom": "18.0.9",
-		"axios": "^1.2.1",
+		"axios": "^1.2.2",
 		"class-validator": "^0.13.2",
 		"dotenv": "^16.0.3",
 		"eslint": "8.27.0",
@@ -34,6 +34,7 @@
 		"react-icons": "^4.6.0",
 		"react-share": "^4.4.1",
 		"typescript": "4.9.3",
+		"yup": "^0.32.11",
 		"zod": "^3.19.1"
 	},
 	"devDependencies": {

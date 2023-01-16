@@ -4,11 +4,14 @@ export const fetchData = <TData, TVariables>(
 	options?: RequestInit["headers"]
 ): (() => Promise<TData>) => {
 	return async () => {
+		const accessToken = localStorage.getItem("access_token");
+
 		const res = await fetch("http://localhost:8080/graphql", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 				...(options ?? {}),
+				AUTHORIZATION: accessToken ? accessToken.replaceAll('"', "") : "",
 			},
 			body: JSON.stringify({
 				query,
