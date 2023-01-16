@@ -30,7 +30,7 @@ type Props = {
 	isPage?: boolean;
 };
 
-const Chirp = ({ chirpId, isPage = false }: Props) => {
+export const Chirp = ({ chirpId, isPage = false }: Props) => {
 	const chirpData = {};
 
 	const { onCopy, hasCopied } = useClipboard(
@@ -182,5 +182,3 @@ const Chirp = ({ chirpId, isPage = false }: Props) => {
 		</div>
 	);
 };
-
-export default Chirp;

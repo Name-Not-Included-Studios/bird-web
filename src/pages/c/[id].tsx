@@ -3,9 +3,8 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Chirp from '../../components/home/Chirp';
-import Compose from '../../components/home/Compose';
-import { DefaultLayout } from '../../components/layout/Layout';
+import { Chirp, Compose } from '../../components/home';
+import { DefaultLayout } from '../../components/layout';
 
 type Props = {};
 

@@ -11,7 +11,7 @@ const initialValues = {
 	content: "",
 };
 
-const Compose = ({ isReply = false }: Props) => {
+export const Compose = ({ isReply = false }: Props) => {
 	return (
 		<Box w={"full"} mb={4}>
 			<Formik
@@ -46,5 +46,3 @@ const Compose = ({ isReply = false }: Props) => {
 		</Box>
 	);
 };
-
-export default Compose;

@@ -2,7 +2,7 @@ import { Box, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 
-import LoginForm from '../../components/login/LoginForm';
+import { LoginForm } from '../../components/login';
 
 type Props = {};
 

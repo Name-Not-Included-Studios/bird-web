@@ -17,10 +17,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { FaCog, FaHome, FaMoon, FaSun, FaUser } from 'react-icons/fa';
 
-type Props = {};
 const username = "bricewduke";
 
-const SideNav = (props: Props) => {
+export const LeftSideBar = () => {
 	const router = useRouter();
 	const { colorMode, toggleColorMode } = useColorMode();
 
@@ -131,5 +130,3 @@ const SideNav = (props: Props) => {
 		</Flex>
 	);
 };
-
-export default SideNav;

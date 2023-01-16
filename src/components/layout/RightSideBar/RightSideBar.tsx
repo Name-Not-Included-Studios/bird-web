@@ -4,7 +4,7 @@ import { HiMagnifyingGlass } from 'react-icons/hi2';
 
 type Props = {};
 
-const RightSide = (props: Props) => {
+export const RightSidebar = (props: Props) => {
 	return (
 		<Flex
 			direction={"column"}
@@ -36,5 +36,3 @@ const RightSide = (props: Props) => {
 		</Flex>
 	);
 };
-
-export default RightSide;

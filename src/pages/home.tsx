@@ -1,9 +1,8 @@
 import { Divider, Stack } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 
-import Chirp from '../components/home/Chirp';
-import Compose from '../components/home/Compose';
-import { DefaultLayout } from '../components/layout/Layout';
+import { Chirp, Compose } from '../components/home';
+import { DefaultLayout } from '../components/layout';
 
 export default function Home() {
 	const chirpIds = ["fart", "poopoo", "id", "peepee", "burp", "sneeze"];

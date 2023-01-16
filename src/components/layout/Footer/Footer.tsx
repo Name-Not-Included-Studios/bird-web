@@ -18,7 +18,7 @@ type Props = {};
 
 const username = "bricewduke";
 
-const Footer = (props: Props) => {
+export const Footer = (props: Props) => {
 	const router = useRouter();
 	const { colorMode, toggleColorMode } = useColorMode();
 
@@ -70,5 +70,3 @@ const Footer = (props: Props) => {
 		</Flex>
 	);
 };
-
-export default Footer;

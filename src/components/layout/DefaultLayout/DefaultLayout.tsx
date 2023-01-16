@@ -1,9 +1,7 @@
 import { Grid, GridItem } from '@chakra-ui/react';
 import React from 'react';
 
-import Footer from './Footer';
-import RightSide from './RightSide';
-import SideNav from './SideNav';
+import { Footer, LeftSideBar, RightSidebar } from '..';
 
 type Props = {
 	children?: React.ReactNode;
@@ -36,7 +34,7 @@ export const DefaultLayout = ({ children }: Props) => {
 				area={"nav"}
 				display={["none", "block", "block", "block", "block"]}
 			>
-				<SideNav />
+				<LeftSideBar />
 			</GridItem>
 			<GridItem pl="2" area={"main"} position={"relative"} overflowY={"scroll"}>
 				{children}
@@ -53,7 +51,7 @@ export const DefaultLayout = ({ children }: Props) => {
 				area={"side"}
 				display={["none", "none", "block", "block"]}
 			>
-				<RightSide />
+				<RightSidebar />
 			</GridItem>
 		</Grid>
 	);

@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { DefaultLayout } from '../../components/layout/Layout';
+import { DefaultLayout } from '../../components/layout';
 
 type Props = {};
 

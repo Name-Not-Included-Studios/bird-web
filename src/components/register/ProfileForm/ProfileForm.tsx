@@ -2,9 +2,9 @@ import { Button, Input, Stack, Text } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 
-import { useAppDispatch } from "../../app/hooks";
-import { setUser } from "../../features/auth/authSlice";
-import { useUpdateUserMutation } from "../../lib/__generated__/graphql";
+import { useAppDispatch } from "../../../app/hooks";
+import { setUser } from "../../../features/auth/authSlice";
+import { useUpdateUserMutation } from "../../../lib/__generated__/graphql";
 
 export const ProfileForm = () => {
 	const router = useRouter();

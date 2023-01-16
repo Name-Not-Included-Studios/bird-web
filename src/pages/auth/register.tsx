@@ -11,8 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-import { ProfileForm } from "../../components/register/profile-form";
-import { RegisterForm } from "../../components/register/register-form";
+import { ProfileForm, RegisterForm } from "../../components/register";
 
 const RegisterPage = () => {
 	const [step, setStep] = useState(0);

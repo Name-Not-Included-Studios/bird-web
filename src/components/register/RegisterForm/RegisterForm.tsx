@@ -10,9 +10,9 @@ import { Field, Form, Formik } from "formik";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
 
-import { useAppDispatch } from "../../app/hooks";
-import { setAuth } from "../../features/auth/authSlice";
-import { useCreateAccountMutation } from "../../lib/__generated__/graphql";
+import { useAppDispatch } from "../../../app/hooks";
+import { setAuth } from "../../../features/auth/authSlice";
+import { useCreateAccountMutation } from "../../../lib/__generated__/graphql";
 
 export const RegisterForm = ({
 	setStep,
