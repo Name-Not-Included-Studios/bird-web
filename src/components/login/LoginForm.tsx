@@ -7,10 +7,13 @@ import {
 	Text,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
 import * as Yup from "yup";
 
+import { useAppDispatch } from "../../app/hooks";
+import { setAuth } from "../../features/auth/authSlice";
 import { useLoginMutation } from "../../lib/__generated__/graphql";
 
 const LoginSchema = Yup.object().shape({
@@ -23,9 +26,10 @@ const initialValues = {
 	password: "",
 };
 
-type Props = {};
+const LoginForm = () => {
+	const router = useRouter();
 
-const LoginForm = (props: Props) => {
+	const dispatch = useAppDispatch();
 	const { error, isLoading, mutateAsync } = useLoginMutation();
 
 	const [show, setShow] = useState(false);
@@ -37,12 +41,19 @@ const LoginForm = (props: Props) => {
 			validationSchema={LoginSchema}
 			onSubmit={async (values) => {
 				try {
-					await mutateAsync({
+					const { login } = await mutateAsync({
 						auth: {
 							email: values.email,
 							password: values.password,
 						},
 					});
+
+					if (login && login.access_token && login.refresh_token) {
+						dispatch(setAuth(login));
+
+						// navigate to the home page
+						if (!error) router.push("/home");
+					}
 				} catch (error) {}
 			}}
 		>

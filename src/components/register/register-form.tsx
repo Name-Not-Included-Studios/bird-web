@@ -10,6 +10,8 @@ import { Field, Form, Formik } from "formik";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
 
+import { useAppDispatch } from "../../app/hooks";
+import { setAuth } from "../../features/auth/authSlice";
 import { useCreateAccountMutation } from "../../lib/__generated__/graphql";
 
 export const RegisterForm = ({
@@ -17,6 +19,7 @@ export const RegisterForm = ({
 }: {
 	setStep: Dispatch<SetStateAction<number>>;
 }) => {
+	const dispatch = useAppDispatch();
 	const { mutateAsync, error, isLoading } = useCreateAccountMutation();
 
 	const [show, setShow] = useState(false);
@@ -36,13 +39,13 @@ export const RegisterForm = ({
 						},
 					});
 
-					console.log(createAccount?.access_token);
-
-					// if (createAccount?.access_token && createAccount?.refresh_token)
-					// 	authContext?.setAuthState({
-					// 		access_token: createAccount.access_token,
-					// 		refresh_token: createAccount.refresh_token,
-					// 	});
+					if (
+						createAccount &&
+						createAccount.access_token &&
+						createAccount.refresh_token
+					) {
+						dispatch(setAuth(createAccount));
+					}
 
 					setStep(1);
 				} catch (error) {}

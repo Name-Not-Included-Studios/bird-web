@@ -2,10 +2,14 @@ import { Button, Input, Stack, Text } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 
+import { useAppDispatch } from "../../app/hooks";
+import { setUser } from "../../features/auth/authSlice";
 import { useUpdateUserMutation } from "../../lib/__generated__/graphql";
 
 export const ProfileForm = () => {
 	const router = useRouter();
+
+	const dispatch = useAppDispatch();
 	const { mutateAsync, error, isLoading } = useUpdateUserMutation();
 
 	return (
@@ -19,7 +23,7 @@ export const ProfileForm = () => {
 			}}
 			onSubmit={async (values) => {
 				try {
-					await mutateAsync({
+					const { updateUser } = await mutateAsync({
 						user: {
 							username: values.username,
 							displayName: values.displayName,
@@ -29,9 +33,12 @@ export const ProfileForm = () => {
 						},
 					});
 
-					// navigate to the home page
+					if (updateUser) {
+						dispatch(setUser(updateUser));
 
-					if (!error) router.push("/home");
+						// navigate to the home page
+						if (!error) router.push("/home");
+					}
 				} catch (error) {
 					console.error(error);
 				}
