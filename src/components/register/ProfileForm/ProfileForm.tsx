@@ -14,6 +14,7 @@ export const ProfileForm = () => {
 		onSuccess: (data) => {
 			if (data.updateUser) {
 				dispatch(setUser(data.updateUser));
+
 				router.push("/home");
 			}
 		},
@@ -28,7 +29,7 @@ export const ProfileForm = () => {
 				websiteUrl: "",
 				avatarUrl: "",
 			}}
-			onSubmit={async (values, { resetForm }) => {
+			onSubmit={async (values) => {
 				mutate({
 					user: {
 						username: values.username,
@@ -38,59 +39,78 @@ export const ProfileForm = () => {
 						avatarUrl: values.avatarUrl,
 					},
 				});
-
-				resetForm();
 			}}
 		>
 			{({ touched, errors, isSubmitting }) => (
 				<Form>
-					<Stack w={"md"}>
-						<Field
-							type="text"
-							name="username"
-							placeholder="Username"
-							as={Input}
-						/>
-						{errors.username && touched.username ? (
-							<Text variant={"error"}>{errors.username}</Text>
-						) : null}
+					<Stack alignItems={"center"} gap={4}>
+						<Stack gap={2}>
+							<Field
+								variant="filled"
+								size={"lg"}
+								type="text"
+								name="username"
+								placeholder="Username"
+								as={Input}
+							/>
+							{errors.username && touched.username ? (
+								<Text variant={"error"}>{errors.username}</Text>
+							) : null}
 
-						<Field
-							type="text"
-							name="displayName"
-							placeholder="Display Name"
-							as={Input}
-						/>
-						{errors.displayName && touched.displayName ? (
-							<Text variant={"error"}>{errors.displayName}</Text>
-						) : null}
+							<Field
+								variant="filled"
+								size={"lg"}
+								type="text"
+								name="displayName"
+								placeholder="Display Name"
+								as={Input}
+							/>
+							{errors.displayName && touched.displayName ? (
+								<Text variant={"error"}>{errors.displayName}</Text>
+							) : null}
 
-						<Field type="text" name="bio" placeholder="Bio" as={Input} />
-						{errors.bio && touched.bio ? (
-							<Text variant={"error"}>{errors.bio}</Text>
-						) : null}
+							<Field
+								variant="filled"
+								size={"lg"}
+								type="text"
+								name="bio"
+								placeholder="Bio"
+								as={Input}
+							/>
+							{errors.bio && touched.bio ? (
+								<Text variant={"error"}>{errors.bio}</Text>
+							) : null}
 
-						<Field
-							type="url"
-							name="websiteUrl"
-							placeholder="Website URL"
-							as={Input}
-						/>
-						{errors.websiteUrl && touched.websiteUrl ? (
-							<Text variant={"error"}>{errors.websiteUrl}</Text>
-						) : null}
+							<Field
+								variant="filled"
+								size={"lg"}
+								type="url"
+								name="websiteUrl"
+								placeholder="Website URL"
+								as={Input}
+							/>
+							{errors.websiteUrl && touched.websiteUrl ? (
+								<Text variant={"error"}>{errors.websiteUrl}</Text>
+							) : null}
 
-						<Field
-							type="url"
-							name="avatarUrl"
-							placeholder="Avatar URL"
-							as={Input}
-						/>
-						{errors.avatarUrl && touched.avatarUrl ? (
-							<Text variant={"error"}>{errors.avatarUrl}</Text>
-						) : null}
+							<Field
+								variant="filled"
+								size={"lg"}
+								type="url"
+								name="avatarUrl"
+								placeholder="Avatar URL"
+								as={Input}
+							/>
+							{errors.avatarUrl && touched.avatarUrl ? (
+								<Text variant={"error"}>{errors.avatarUrl}</Text>
+							) : null}
+						</Stack>
 
-						<Button type="submit" isLoading={isSubmitting}>
+						<Button
+							colorScheme={"teal"}
+							type={"submit"}
+							isLoading={isSubmitting}
+						>
 							Create Profile
 						</Button>
 						{error && !isLoading ? (

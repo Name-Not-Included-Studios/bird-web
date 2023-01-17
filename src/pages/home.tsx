@@ -4,23 +4,27 @@ import { GetServerSideProps } from "next";
 
 import { Chirp, Compose } from "../components/home";
 import { DefaultLayout } from "../components/layout";
-import { GetMeDocument } from "../lib/__generated__/graphql";
+import {
+	GetMeDocument,
+	useGetTimelineQuery,
+} from "../lib/__generated__/graphql";
 import { axiosGetMe } from "../lib/graphql-fetcher";
 import { queryClient } from "../lib/react-query";
 
 export default function Home() {
-	const chirpIds = ["fart", "poopoo", "id", "peepee", "burp", "sneeze"];
+	const data = useGetTimelineQuery({ page: 1, pageSize: 20 });
 
 	return (
 		<DefaultLayout>
 			<Stack direction={"column"} padding={10}>
 				<Compose />
-				{chirpIds.map((id) => (
-					<>
-						<Chirp chirpId={id} key={id} />
-						<Divider key={id} />
-					</>
-				))}
+				{data.data?.getTimeline &&
+					data.data.getTimeline.map((post) => (
+						<>
+							<Chirp chirpId={post!.postId} key={post!.postId} />
+							<Divider key={post!.postId + "-div"} />
+						</>
+					))}
 			</Stack>
 		</DefaultLayout>
 	);

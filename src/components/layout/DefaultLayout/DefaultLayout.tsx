@@ -10,6 +10,7 @@ type Props = {
 export const DefaultLayout = ({ children }: Props) => {
 	return (
 		<Grid
+			w={"100%"}
 			templateAreas={[
 				`"main main main"
                  "footer footer footer"`,

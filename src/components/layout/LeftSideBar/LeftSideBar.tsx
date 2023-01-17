@@ -17,15 +17,21 @@ import { useRouter } from "next/router";
 import React from "react";
 import { FaCog, FaHome, FaMoon, FaSun, FaUser } from "react-icons/fa";
 
-import { useAppSelector } from "../../../app/hooks";
-
-const username = "bricewduke";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { clearAuth } from "../../../features/auth/authSlice";
 
 export const LeftSideBar = () => {
+	const dispatch = useAppDispatch();
+
 	const router = useRouter();
 	const { user } = useAppSelector((state) => state.auth);
 
 	const { colorMode, toggleColorMode } = useColorMode();
+
+	const handleLogout = () => {
+		dispatch(clearAuth());
+		router.push("/auth/login");
+	};
 
 	return (
 		<Flex
@@ -60,13 +66,13 @@ export const LeftSideBar = () => {
 						size={"lg"}
 						width={["auto", "auto", "auto", "52"]}
 						justifyContent={"start"}
-						variant={router.pathname === "/" ? "solid" : "ghost"}
+						variant={router.pathname === "/home" ? "solid" : "ghost"}
 					>
 						<Text display={["none", "none", "none", "block"]}>Home</Text>
 					</Button>
 				</Link>
 
-				<Link href={`/u/${encodeURIComponent(username)}`}>
+				<Link href={`/u/${encodeURIComponent(user ? user.username : "brice")}`}>
 					<Button
 						leftIcon={<FaUser />}
 						size={"lg"}
@@ -123,7 +129,7 @@ export const LeftSideBar = () => {
 					<PopoverContent border={"none"} width="auto">
 						<PopoverArrow />
 						<PopoverBody display="flex" justifyContent={"center"} gap={"3"}>
-							<Button>Log Out</Button>
+							<Button onClick={handleLogout}>Log Out</Button>
 							<Button onClick={toggleColorMode}>
 								{colorMode === "light" ? <FaMoon /> : <FaSun />}
 							</Button>

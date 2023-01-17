@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { deleteCookie, setCookie } from "cookies-next";
 
 import { LoginResponse, User } from "../../lib/__generated__/graphql";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../app/store";
-
 // Define a type for the slice state
 interface AuthState {
 	access_token: string;
@@ -26,17 +26,34 @@ export const authSlice = createSlice({
 	reducers: {
 		// Use the PayloadAction type to declare the contents of `action.payload`
 		setAuth: (state, { payload }: PayloadAction<LoginResponse>) => {
+			setCookie("access_token", payload.access_token, {
+				sameSite: true,
+				secure: true,
+			});
+			setCookie("refresh_token", payload.refresh_token, {
+				sameSite: true,
+				secure: true,
+			});
+
 			state.access_token = payload.access_token;
 			state.refresh_token = payload.refresh_token;
 			state.user = payload.user;
 		},
 		setAccessToken: (state, { payload }: PayloadAction<string>) => {
+			setCookie("access_token", payload, {
+				httpOnly: true,
+				sameSite: true,
+			});
+
 			state.access_token = payload;
 		},
 		setUser: (state, { payload }: PayloadAction<User>) => {
 			state.user = payload;
 		},
 		clearAuth: (state) => {
+			deleteCookie("access_token");
+			deleteCookie("refresh_token");
+
 			state = initialState;
 		},
 	},

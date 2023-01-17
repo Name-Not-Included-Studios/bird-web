@@ -1,18 +1,21 @@
 import {
-    Avatar,
-    Button,
-    Flex,
-    Popover,
-    PopoverArrow,
-    PopoverBody,
-    PopoverContent,
-    PopoverTrigger,
-    useColorMode,
-} from '@chakra-ui/react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { FaCog, FaHome, FaMoon, FaSun, FaUser } from 'react-icons/fa';
+	Avatar,
+	Button,
+	Flex,
+	Popover,
+	PopoverArrow,
+	PopoverBody,
+	PopoverContent,
+	PopoverTrigger,
+	useColorMode,
+} from "@chakra-ui/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { FaCog, FaHome, FaMoon, FaSun, FaUser } from "react-icons/fa";
+
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { clearAuth } from "../../../features/auth/authSlice";
 
 type Props = {};
 
@@ -20,7 +23,15 @@ const username = "bricewduke";
 
 export const Footer = (props: Props) => {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
+	const { user } = useAppSelector((state) => state.auth);
+
 	const { colorMode, toggleColorMode } = useColorMode();
+
+	const handleLogout = () => {
+		dispatch(clearAuth());
+		router.push("/auth/login");
+	};
 
 	return (
 		<Flex w={"full"} h={"full"} justifyContent={"center"} gap={6}>
@@ -33,7 +44,7 @@ export const Footer = (props: Props) => {
 				<PopoverContent border={"none"} width="auto">
 					<PopoverArrow />
 					<PopoverBody display="flex" justifyContent={"center"} gap={"3"}>
-						<Button>Log Out</Button>
+						<Button onClick={handleLogout}>Log Out</Button>
 						<Button onClick={toggleColorMode}>
 							{colorMode === "light" ? <FaMoon /> : <FaSun />}
 						</Button>
@@ -41,16 +52,16 @@ export const Footer = (props: Props) => {
 				</PopoverContent>
 			</Popover>
 
-			<Link href={"/"}>
+			<Link href={"/home"}>
 				<Button
 					size={"lg"}
-					variant={router.pathname === "/" ? "solid" : "ghost"}
+					variant={router.pathname === "/home" ? "solid" : "ghost"}
 				>
 					<FaHome />
 				</Button>
 			</Link>
 
-			<Link href={`/u/${encodeURIComponent(username)}`}>
+			<Link href={`/u/${encodeURIComponent(user ? user.username : "")}`}>
 				<Button
 					size={"lg"}
 					variant={router.pathname === `/u/[username]` ? "solid" : "ghost"}

@@ -1,6 +1,8 @@
-import { Box, Button, Divider, Textarea } from '@chakra-ui/react';
-import { Form, Formik } from 'formik';
-import React from 'react';
+import { Box, Button, Divider, Textarea } from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
+import React from "react";
+
+import { useCreatePostMutation } from "../../../lib/__generated__/graphql";
 
 type Props = {
 	isReply?: boolean;
@@ -11,19 +13,42 @@ const initialValues = {
 	content: "",
 };
 
-export const Compose = ({ isReply = false }: Props) => {
+export const Compose = ({ isReply = false, parentChirpId }: Props) => {
+	const { mutate, error, isLoading } = useCreatePostMutation({
+		onSuccess: (data) => {
+			if (data.createPost) {
+				console.log("created");
+
+				console.log(data.createPost);
+			}
+		},
+	});
+
 	return (
 		<Box w={"full"} mb={4}>
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values, actions) => {
-					console.log({ values, actions });
-					alert(JSON.stringify(values, null, 2));
+					if (isReply) {
+						mutate({
+							post: {
+								content: values.content,
+								parentId: parentChirpId,
+							},
+						});
+					} else {
+						mutate({
+							post: {
+								content: values.content,
+							},
+						});
+					}
+
 					actions.setSubmitting(false);
 				}}
 			>
 				<Form>
-					<Textarea
+					<Field
 						id="content"
 						name="content"
 						placeholder={
@@ -33,11 +58,12 @@ export const Compose = ({ isReply = false }: Props) => {
 						}
 						border={"none"}
 						resize={"none"}
+						as={Textarea}
 					/>
 					<Divider mt={4} mb={4} />
 
 					<Box w={"full"} display={"flex"} justifyContent={"flex-end"}>
-						<Button type="submit" colorScheme={"teal"}>
+						<Button type="submit" colorScheme={"teal"} isLoading={isLoading}>
 							{isReply ? "Reply" : "Chirp"}
 						</Button>
 					</Box>

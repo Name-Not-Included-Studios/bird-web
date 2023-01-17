@@ -9,7 +9,6 @@ import {
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
 import * as Yup from "yup";
 
@@ -28,9 +27,6 @@ const initialValues = {
 };
 
 export const LoginForm = () => {
-	const [, setAccessTokenCookie] = useCookies(["access_token"]);
-	const [, setRefreshTokenCookie] = useCookies(["refresh_token"]);
-
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -39,15 +35,6 @@ export const LoginForm = () => {
 		onSuccess: (data) => {
 			if (data.login) {
 				dispatch(setAuth(data.login));
-
-				setAccessTokenCookie("access_token", data.login.access_token, {
-					path: "/",
-					sameSite: true,
-				});
-				setRefreshTokenCookie("refresh_token", data.login.refresh_token, {
-					path: "/",
-					sameSite: true,
-				});
 
 				router.push("/home");
 			}
@@ -61,15 +48,13 @@ export const LoginForm = () => {
 		<Formik
 			initialValues={initialValues}
 			validationSchema={LoginSchema}
-			onSubmit={(values, { resetForm }) => {
+			onSubmit={(values) => {
 				mutate({
 					auth: {
 						email: values.email,
 						password: values.password,
 					},
 				});
-
-				resetForm();
 			}}
 		>
 			{({ errors, touched, isSubmitting }) => (

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
-import { GetMeQuery } from "./__generated__/graphql";
+import { GetMeQuery, RefreshDocument } from "./__generated__/graphql";
 
 const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string;
 
@@ -13,7 +13,26 @@ export const fetchData = <TData, TVariables>(
 	return async () => {
 		const access_token = getCookie("access_token");
 
-		const res = await fetch(GRAPHQL_ENDPOINT, {
+		let res: Response;
+
+		if (query === RefreshDocument) {
+			const refresh_token = getCookie("refresh_token");
+
+			res = await fetch(GRAPHQL_ENDPOINT, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					...(options ?? {}),
+					AUTHORIZATION: refresh_token ? refresh_token.toString() : "",
+				},
+				body: JSON.stringify({
+					query,
+					variables,
+				}),
+			});
+		}
+
+		res = await fetch(GRAPHQL_ENDPOINT, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
