@@ -29,9 +29,9 @@ export const authSlice = createSlice({
 			state.access_token = payload.access_token;
 			state.refresh_token = payload.refresh_token;
 			state.user = payload.user;
-
-			localStorage.setItem("access_token", payload.access_token);
-			localStorage.setItem("refresh_token", payload.refresh_token);
+		},
+		setAccessToken: (state, { payload }: PayloadAction<string>) => {
+			state.access_token = payload;
 		},
 		setUser: (state, { payload }: PayloadAction<User>) => {
 			state.user = payload;
@@ -42,7 +42,8 @@ export const authSlice = createSlice({
 	},
 });
 
-export const { setAuth, setUser, clearAuth } = authSlice.actions;
+export const { setAuth, setUser, setAccessToken, clearAuth } =
+	authSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectUser = (state: RootState) => state.auth.user;

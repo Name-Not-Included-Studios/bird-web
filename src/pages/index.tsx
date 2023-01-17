@@ -1,24 +1,25 @@
 import {
-    Alert,
-    AlertDescription,
-    AlertIcon,
-    AlertTitle,
-    Box,
-    Button,
-    CloseButton,
-    FormControl,
-    FormErrorMessage,
-    Heading,
-    Img,
-    Input,
-    Stack,
-    Text,
-    useDisclosure,
-} from '@chakra-ui/react';
-import axios from 'axios';
-import { Formik } from 'formik';
-import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+	Alert,
+	AlertDescription,
+	AlertIcon,
+	AlertTitle,
+	Box,
+	Button,
+	CloseButton,
+	FormControl,
+	FormErrorMessage,
+	Heading,
+	Img,
+	Input,
+	Stack,
+	Text,
+	useDisclosure,
+} from "@chakra-ui/react";
+import axios from "axios";
+import { Formik } from "formik";
+import { GetServerSideProps } from "next";
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
 
 type Props = {
 	imageUrl?: string;
@@ -202,6 +203,14 @@ const Home = () => {
 			</Stack>
 		</Stack>
 	);
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	return {
+		props: {
+			requireAuth: false,
+		},
+	};
 };
 
 export default Home;

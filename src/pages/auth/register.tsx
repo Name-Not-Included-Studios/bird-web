@@ -9,6 +9,7 @@ import {
 	Tabs,
 	Text,
 } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import { useState } from "react";
 
 import { ProfileForm, RegisterForm } from "../../components/register";
@@ -46,6 +47,14 @@ const RegisterPage = () => {
 			</HStack>
 		</Box>
 	);
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	return {
+		props: {
+			requireAuth: false,
+		},
+	};
 };
 
 export default RegisterPage;

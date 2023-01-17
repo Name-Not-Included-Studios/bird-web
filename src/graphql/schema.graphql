@@ -34,6 +34,24 @@ mutation CreateAccount($auth: AuthInput!) {
 	}
 }
 
+mutation UpdatePassword($oldPassword: String!, $newPassword: String!) {
+	updatePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
+		user {
+			userId
+			username
+			displayName
+			bio
+			websiteUrl
+			avatarUrl
+			chirpCount
+			followersCount
+			followingCount
+		}
+		access_token
+		refresh_token
+	}
+}
+
 mutation UpdateUser($user: UserInput!) {
 	updateUser(user: $user) {
 		userId
@@ -48,18 +66,8 @@ mutation UpdateUser($user: UserInput!) {
 	}
 }
 
-mutation DeleteUser {
-	deleteUser {
-		userId
-		username
-		displayName
-		bio
-		websiteUrl
-		avatarUrl
-		chirpCount
-		followersCount
-		followingCount
-	}
+mutation DeleteUser($auth: AuthInput!) {
+	deleteUser(auth: $auth)
 }
 
 mutation CreatePost($post: PostInput!) {
@@ -85,7 +93,6 @@ mutation DeletePost($postId: ID!) {
 		parentId
 	}
 }
-
 mutation AnnotatePost($postId: String!, $annotation: String!) {
 	annotatePost(postId: $postId, annotation: $annotation) {
 		postId
@@ -150,25 +157,7 @@ mutation UnlikePost($postId: ID!) {
 	}
 }
 
-mutation UpdatePassword($oldPassword: String!, $newPassword: String!) {
-	updatePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
-		user {
-			userId
-			username
-			displayName
-			bio
-			websiteUrl
-			avatarUrl
-			chirpCount
-			followersCount
-			followingCount
-		}
-		access_token
-		refresh_token
-	}
-}
-
-query ApiVersion {
+query GetApiVersion {
 	apiVersion
 }
 
@@ -178,11 +167,6 @@ query SearchUsers($query: UserSearchCriteria!) {
 		username
 		displayName
 		bio
-		websiteUrl
-		avatarUrl
-		chirpCount
-		followersCount
-		followingCount
 	}
 }
 
@@ -198,10 +182,6 @@ query GetMe {
 		followersCount
 		followingCount
 	}
-}
-
-query GetAccessToken {
-	getAccessToken
 }
 
 query GetPost($postId: ID!) {
@@ -226,4 +206,20 @@ query GetRecentPostsFromUser($userId: ID!, $page: Int!, $pageSize: Int!) {
 		annotation
 		parentId
 	}
+}
+
+query GetTimeline($page: Int!, $pageSize: Int!) {
+	getTimeline(page: $page, pageSize: $pageSize) {
+		postId
+		userId
+		content
+		likesCount
+		isPublished
+		annotation
+		parentId
+	}
+}
+
+query Refresh {
+	refresh
 }

@@ -38,7 +38,7 @@ export type Mutation = {
   createAccount?: Maybe<LoginResponse>;
   createPost?: Maybe<Post>;
   deletePost?: Maybe<Post>;
-  deleteUser?: Maybe<User>;
+  deleteUser?: Maybe<Scalars['Boolean']>;
   followUser?: Maybe<User>;
   likePost?: Maybe<Post>;
   login?: Maybe<LoginResponse>;
@@ -68,6 +68,11 @@ export type MutationCreatePostArgs = {
 
 export type MutationDeletePostArgs = {
   postId: Scalars['ID'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  auth: AuthInput;
 };
 
 
@@ -127,11 +132,11 @@ export type PostInput = {
 export type Query = {
   __typename?: 'Query';
   apiVersion: Scalars['ID'];
-  getAccessToken?: Maybe<Scalars['String']>;
   getMe?: Maybe<User>;
   getPost?: Maybe<Post>;
   getRecentPostsFromUser?: Maybe<Array<Maybe<Post>>>;
   getTimeline?: Maybe<Array<Maybe<Post>>>;
+  refresh?: Maybe<Scalars['String']>;
   searchUsers?: Maybe<Array<Maybe<User>>>;
 };
 
@@ -204,6 +209,14 @@ export type CreateAccountMutationVariables = Exact<{
 
 export type CreateAccountMutation = { __typename?: 'Mutation', createAccount?: { __typename?: 'LoginResponse', access_token: string, refresh_token: string, user: { __typename?: 'User', userId: string, username: string, displayName: string, bio: string, websiteUrl: string, avatarUrl: string, chirpCount: number, followersCount: number, followingCount: number } } | null };
 
+export type UpdatePasswordMutationVariables = Exact<{
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type UpdatePasswordMutation = { __typename?: 'Mutation', updatePassword?: { __typename?: 'LoginResponse', access_token: string, refresh_token: string, user: { __typename?: 'User', userId: string, username: string, displayName: string, bio: string, websiteUrl: string, avatarUrl: string, chirpCount: number, followersCount: number, followingCount: number } } | null };
+
 export type UpdateUserMutationVariables = Exact<{
   user: UserInput;
 }>;
@@ -211,10 +224,12 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', userId: string, username: string, displayName: string, bio: string, websiteUrl: string, avatarUrl: string, chirpCount: number, followersCount: number, followingCount: number } | null };
 
-export type DeleteUserMutationVariables = Exact<{ [key: string]: never; }>;
+export type DeleteUserMutationVariables = Exact<{
+  auth: AuthInput;
+}>;
 
 
-export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'User', userId: string, username: string, displayName: string, bio: string, websiteUrl: string, avatarUrl: string, chirpCount: number, followersCount: number, followingCount: number } | null };
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser?: boolean | null };
 
 export type CreatePostMutationVariables = Exact<{
   post: PostInput;
@@ -266,35 +281,22 @@ export type UnlikePostMutationVariables = Exact<{
 
 export type UnlikePostMutation = { __typename?: 'Mutation', unlikePost?: { __typename?: 'Post', postId: string, userId: string, content: string, likesCount: number, isPublished: boolean, annotation?: string | null, parentId?: string | null } | null };
 
-export type UpdatePasswordMutationVariables = Exact<{
-  oldPassword: Scalars['String'];
-  newPassword: Scalars['String'];
-}>;
+export type GetApiVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UpdatePasswordMutation = { __typename?: 'Mutation', updatePassword?: { __typename?: 'LoginResponse', access_token: string, refresh_token: string, user: { __typename?: 'User', userId: string, username: string, displayName: string, bio: string, websiteUrl: string, avatarUrl: string, chirpCount: number, followersCount: number, followingCount: number } } | null };
-
-export type ApiVersionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ApiVersionQuery = { __typename?: 'Query', apiVersion: string };
+export type GetApiVersionQuery = { __typename?: 'Query', apiVersion: string };
 
 export type SearchUsersQueryVariables = Exact<{
   query: UserSearchCriteria;
 }>;
 
 
-export type SearchUsersQuery = { __typename?: 'Query', searchUsers?: Array<{ __typename?: 'User', userId: string, username: string, displayName: string, bio: string, websiteUrl: string, avatarUrl: string, chirpCount: number, followersCount: number, followingCount: number } | null> | null };
+export type SearchUsersQuery = { __typename?: 'Query', searchUsers?: Array<{ __typename?: 'User', userId: string, username: string, displayName: string, bio: string } | null> | null };
 
 export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMeQuery = { __typename?: 'Query', getMe?: { __typename?: 'User', userId: string, username: string, displayName: string, bio: string, websiteUrl: string, avatarUrl: string, chirpCount: number, followersCount: number, followingCount: number } | null };
-
-export type GetAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAccessTokenQuery = { __typename?: 'Query', getAccessToken?: string | null };
 
 export type GetPostQueryVariables = Exact<{
   postId: Scalars['ID'];
@@ -311,6 +313,19 @@ export type GetRecentPostsFromUserQueryVariables = Exact<{
 
 
 export type GetRecentPostsFromUserQuery = { __typename?: 'Query', getRecentPostsFromUser?: Array<{ __typename?: 'Post', postId: string, userId: string, content: string, likesCount: number, isPublished: boolean, annotation?: string | null, parentId?: string | null } | null> | null };
+
+export type GetTimelineQueryVariables = Exact<{
+  page: Scalars['Int'];
+  pageSize: Scalars['Int'];
+}>;
+
+
+export type GetTimelineQuery = { __typename?: 'Query', getTimeline?: Array<{ __typename?: 'Post', postId: string, userId: string, content: string, likesCount: number, isPublished: boolean, annotation?: string | null, parentId?: string | null } | null> | null };
+
+export type RefreshQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RefreshQuery = { __typename?: 'Query', refresh?: string | null };
 
 
 export const LoginDocument = `
@@ -369,6 +384,34 @@ export const useCreateAccountMutation = <
       (variables?: CreateAccountMutationVariables) => fetchData<CreateAccountMutation, CreateAccountMutationVariables>(CreateAccountDocument, variables)(),
       options
     );
+export const UpdatePasswordDocument = `
+    mutation UpdatePassword($oldPassword: String!, $newPassword: String!) {
+  updatePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
+    user {
+      userId
+      username
+      displayName
+      bio
+      websiteUrl
+      avatarUrl
+      chirpCount
+      followersCount
+      followingCount
+    }
+    access_token
+    refresh_token
+  }
+}
+    `;
+export const useUpdatePasswordMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<UpdatePasswordMutation, TError, UpdatePasswordMutationVariables, TContext>) =>
+    useMutation<UpdatePasswordMutation, TError, UpdatePasswordMutationVariables, TContext>(
+      ['UpdatePassword'],
+      (variables?: UpdatePasswordMutationVariables) => fetchData<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, variables)(),
+      options
+    );
 export const UpdateUserDocument = `
     mutation UpdateUser($user: UserInput!) {
   updateUser(user: $user) {
@@ -394,18 +437,8 @@ export const useUpdateUserMutation = <
       options
     );
 export const DeleteUserDocument = `
-    mutation DeleteUser {
-  deleteUser {
-    userId
-    username
-    displayName
-    bio
-    websiteUrl
-    avatarUrl
-    chirpCount
-    followersCount
-    followingCount
-  }
+    mutation DeleteUser($auth: AuthInput!) {
+  deleteUser(auth: $auth)
 }
     `;
 export const useDeleteUserMutation = <
@@ -575,49 +608,21 @@ export const useUnlikePostMutation = <
       (variables?: UnlikePostMutationVariables) => fetchData<UnlikePostMutation, UnlikePostMutationVariables>(UnlikePostDocument, variables)(),
       options
     );
-export const UpdatePasswordDocument = `
-    mutation UpdatePassword($oldPassword: String!, $newPassword: String!) {
-  updatePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
-    user {
-      userId
-      username
-      displayName
-      bio
-      websiteUrl
-      avatarUrl
-      chirpCount
-      followersCount
-      followingCount
-    }
-    access_token
-    refresh_token
-  }
-}
-    `;
-export const useUpdatePasswordMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<UpdatePasswordMutation, TError, UpdatePasswordMutationVariables, TContext>) =>
-    useMutation<UpdatePasswordMutation, TError, UpdatePasswordMutationVariables, TContext>(
-      ['UpdatePassword'],
-      (variables?: UpdatePasswordMutationVariables) => fetchData<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, variables)(),
-      options
-    );
-export const ApiVersionDocument = `
-    query ApiVersion {
+export const GetApiVersionDocument = `
+    query GetApiVersion {
   apiVersion
 }
     `;
-export const useApiVersionQuery = <
-      TData = ApiVersionQuery,
+export const useGetApiVersionQuery = <
+      TData = GetApiVersionQuery,
       TError = unknown
     >(
-      variables?: ApiVersionQueryVariables,
-      options?: UseQueryOptions<ApiVersionQuery, TError, TData>
+      variables?: GetApiVersionQueryVariables,
+      options?: UseQueryOptions<GetApiVersionQuery, TError, TData>
     ) =>
-    useQuery<ApiVersionQuery, TError, TData>(
-      variables === undefined ? ['ApiVersion'] : ['ApiVersion', variables],
-      fetchData<ApiVersionQuery, ApiVersionQueryVariables>(ApiVersionDocument, variables),
+    useQuery<GetApiVersionQuery, TError, TData>(
+      variables === undefined ? ['GetApiVersion'] : ['GetApiVersion', variables],
+      fetchData<GetApiVersionQuery, GetApiVersionQueryVariables>(GetApiVersionDocument, variables),
       options
     );
 export const SearchUsersDocument = `
@@ -627,11 +632,6 @@ export const SearchUsersDocument = `
     username
     displayName
     bio
-    websiteUrl
-    avatarUrl
-    chirpCount
-    followersCount
-    followingCount
   }
 }
     `;
@@ -672,23 +672,6 @@ export const useGetMeQuery = <
     useQuery<GetMeQuery, TError, TData>(
       variables === undefined ? ['GetMe'] : ['GetMe', variables],
       fetchData<GetMeQuery, GetMeQueryVariables>(GetMeDocument, variables),
-      options
-    );
-export const GetAccessTokenDocument = `
-    query GetAccessToken {
-  getAccessToken
-}
-    `;
-export const useGetAccessTokenQuery = <
-      TData = GetAccessTokenQuery,
-      TError = unknown
-    >(
-      variables?: GetAccessTokenQueryVariables,
-      options?: UseQueryOptions<GetAccessTokenQuery, TError, TData>
-    ) =>
-    useQuery<GetAccessTokenQuery, TError, TData>(
-      variables === undefined ? ['GetAccessToken'] : ['GetAccessToken', variables],
-      fetchData<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, variables),
       options
     );
 export const GetPostDocument = `
@@ -739,5 +722,47 @@ export const useGetRecentPostsFromUserQuery = <
     useQuery<GetRecentPostsFromUserQuery, TError, TData>(
       ['GetRecentPostsFromUser', variables],
       fetchData<GetRecentPostsFromUserQuery, GetRecentPostsFromUserQueryVariables>(GetRecentPostsFromUserDocument, variables),
+      options
+    );
+export const GetTimelineDocument = `
+    query GetTimeline($page: Int!, $pageSize: Int!) {
+  getTimeline(page: $page, pageSize: $pageSize) {
+    postId
+    userId
+    content
+    likesCount
+    isPublished
+    annotation
+    parentId
+  }
+}
+    `;
+export const useGetTimelineQuery = <
+      TData = GetTimelineQuery,
+      TError = unknown
+    >(
+      variables: GetTimelineQueryVariables,
+      options?: UseQueryOptions<GetTimelineQuery, TError, TData>
+    ) =>
+    useQuery<GetTimelineQuery, TError, TData>(
+      ['GetTimeline', variables],
+      fetchData<GetTimelineQuery, GetTimelineQueryVariables>(GetTimelineDocument, variables),
+      options
+    );
+export const RefreshDocument = `
+    query Refresh {
+  refresh
+}
+    `;
+export const useRefreshQuery = <
+      TData = RefreshQuery,
+      TError = unknown
+    >(
+      variables?: RefreshQueryVariables,
+      options?: UseQueryOptions<RefreshQuery, TError, TData>
+    ) =>
+    useQuery<RefreshQuery, TError, TData>(
+      variables === undefined ? ['Refresh'] : ['Refresh', variables],
+      fetchData<RefreshQuery, RefreshQueryVariables>(RefreshDocument, variables),
       options
     );

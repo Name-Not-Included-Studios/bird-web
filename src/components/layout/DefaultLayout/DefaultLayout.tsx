@@ -1,7 +1,7 @@
-import { Grid, GridItem } from '@chakra-ui/react';
-import React from 'react';
+import { Grid, GridItem } from "@chakra-ui/react";
+import React from "react";
 
-import { Footer, LeftSideBar, RightSidebar } from '..';
+import { Footer, LeftSideBar, RightSidebar } from "..";
 
 type Props = {
 	children?: React.ReactNode;

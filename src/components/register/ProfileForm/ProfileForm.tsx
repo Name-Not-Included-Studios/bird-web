@@ -8,9 +8,16 @@ import { useUpdateUserMutation } from "../../../lib/__generated__/graphql";
 
 export const ProfileForm = () => {
 	const router = useRouter();
-
 	const dispatch = useAppDispatch();
-	const { mutateAsync, error, isLoading } = useUpdateUserMutation();
+
+	const { mutate, error, isLoading } = useUpdateUserMutation({
+		onSuccess: (data) => {
+			if (data.updateUser) {
+				dispatch(setUser(data.updateUser));
+				router.push("/home");
+			}
+		},
+	});
 
 	return (
 		<Formik
@@ -21,27 +28,18 @@ export const ProfileForm = () => {
 				websiteUrl: "",
 				avatarUrl: "",
 			}}
-			onSubmit={async (values) => {
-				try {
-					const { updateUser } = await mutateAsync({
-						user: {
-							username: values.username,
-							displayName: values.displayName,
-							bio: values.bio,
-							websiteUrl: values.websiteUrl,
-							avatarUrl: values.avatarUrl,
-						},
-					});
+			onSubmit={async (values, { resetForm }) => {
+				mutate({
+					user: {
+						username: values.username,
+						displayName: values.displayName,
+						bio: values.bio,
+						websiteUrl: values.websiteUrl,
+						avatarUrl: values.avatarUrl,
+					},
+				});
 
-					if (updateUser) {
-						dispatch(setUser(updateUser));
-
-						// navigate to the home page
-						if (!error) router.push("/home");
-					}
-				} catch (error) {
-					console.error(error);
-				}
+				resetForm();
 			}}
 		>
 			{({ touched, errors, isSubmitting }) => (

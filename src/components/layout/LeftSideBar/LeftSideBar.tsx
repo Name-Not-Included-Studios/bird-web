@@ -1,26 +1,30 @@
 import {
-    Avatar,
-    Button,
-    Flex,
-    Heading,
-    Popover,
-    PopoverArrow,
-    PopoverBody,
-    PopoverContent,
-    PopoverTrigger,
-    Stack,
-    Text,
-    useColorMode,
-} from '@chakra-ui/react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { FaCog, FaHome, FaMoon, FaSun, FaUser } from 'react-icons/fa';
+	Avatar,
+	Button,
+	Flex,
+	Heading,
+	Popover,
+	PopoverArrow,
+	PopoverBody,
+	PopoverContent,
+	PopoverTrigger,
+	Stack,
+	Text,
+	useColorMode,
+} from "@chakra-ui/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { FaCog, FaHome, FaMoon, FaSun, FaUser } from "react-icons/fa";
+
+import { useAppSelector } from "../../../app/hooks";
 
 const username = "bricewduke";
 
 export const LeftSideBar = () => {
 	const router = useRouter();
+	const { user } = useAppSelector((state) => state.auth);
+
 	const { colorMode, toggleColorMode } = useColorMode();
 
 	return (
@@ -50,7 +54,7 @@ export const LeftSideBar = () => {
 				gap={6}
 				flexGrow={"1"}
 			>
-				<Link href={"/"}>
+				<Link href={"/home"}>
 					<Button
 						leftIcon={<FaHome />}
 						size={"lg"}
@@ -103,15 +107,15 @@ export const LeftSideBar = () => {
 							width={["20", "20", "20", "52"]}
 							variant="ghost"
 						>
-							<Avatar marginRight={[0, 0, 0, 3]} />
+							<Avatar marginRight={[0, 0, 0, 3]} src={user?.avatarUrl} />
 							<Stack
 								textAlign={"left"}
 								spacing={"0.5"}
 								display={["none", "none", "none", "block"]}
 							>
-								<Text fontSize={"smaller"}>Display Name</Text>
+								<Text fontSize={"smaller"}>{user?.displayName}</Text>
 								<Text fontSize={"sm"} color={"GrayText"}>
-									@{username}
+									@{user?.username}
 								</Text>
 							</Stack>
 						</Button>

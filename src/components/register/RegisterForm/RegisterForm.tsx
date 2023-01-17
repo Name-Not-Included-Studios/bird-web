@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
 
 import { useAppDispatch } from "../../../app/hooks";
@@ -19,8 +20,32 @@ export const RegisterForm = ({
 }: {
 	setStep: Dispatch<SetStateAction<number>>;
 }) => {
+	const [, setAccessTokenCookie] = useCookies(["access_token"]);
+	const [, setRefreshTokenCookie] = useCookies(["refresh_token"]);
+
 	const dispatch = useAppDispatch();
-	const { mutateAsync, error, isLoading } = useCreateAccountMutation();
+
+	const { mutate, error, isLoading } = useCreateAccountMutation({
+		onSuccess: (data) => {
+			if (data.createAccount) {
+				dispatch(setAuth(data.createAccount));
+				setStep(1);
+
+				setAccessTokenCookie("access_token", data.createAccount.access_token, {
+					path: "/",
+					sameSite: true,
+				});
+				setRefreshTokenCookie(
+					"refresh_token",
+					data.createAccount.refresh_token,
+					{
+						path: "/",
+						sameSite: true,
+					}
+				);
+			}
+		},
+	});
 
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
@@ -28,27 +53,15 @@ export const RegisterForm = ({
 	return (
 		<Formik
 			initialValues={{ email: "", password: "" }}
-			onSubmit={async (values) => {
-				try {
-					console.log(values.password);
+			onSubmit={(values, { resetForm }) => {
+				mutate({
+					auth: {
+						email: values.email,
+						password: values.password,
+					},
+				});
 
-					const { createAccount } = await mutateAsync({
-						auth: {
-							email: values.email,
-							password: values.password,
-						},
-					});
-
-					if (
-						createAccount &&
-						createAccount.access_token &&
-						createAccount.refresh_token
-					) {
-						dispatch(setAuth(createAccount));
-					}
-
-					setStep(1);
-				} catch (error) {}
+				resetForm();
 			}}
 		>
 			{({ errors, touched, isSubmitting }) => (
