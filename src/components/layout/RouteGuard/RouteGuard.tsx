@@ -34,7 +34,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
 		}
 	);
 
-	const { isLoading, isFetching, data } = useGetMeQuery(
+	const { data } = useGetMeQuery(
 		{},
 		{
 			retry: 1,
@@ -53,8 +53,6 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
 	if (!requireAuth) {
 		return <>{children}</>;
 	}
-
-	const loading = isFetching || query.isFetching;
 
 	return <>{requireAuth && data?.getMe ? <>{children}</> : <></>}</>;
 };

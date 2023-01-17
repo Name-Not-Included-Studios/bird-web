@@ -33,7 +33,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 			queryFn: () =>
 				axiosGetMe(GetMeDocument, req.cookies.access_token as string),
 		});
-		console.log("poopoo");
 	} else {
 		return {
 			redirect: {
