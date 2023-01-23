@@ -1,20 +1,13 @@
-import {
-	Button,
-	Input,
-	InputGroup,
-	InputRightElement,
-	Stack,
-	Text,
-} from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
+import { Button, Stack, Text } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { HiEye, HiEyeSlash } from "react-icons/hi2";
 import * as Yup from "yup";
 
 import { useAppDispatch } from "../../../app/hooks";
 import { setAuth } from "../../../features/auth/authSlice";
 import { useLoginMutation } from "../../../lib/__generated__/graphql";
+import { FormikField, FormikPasswordField } from "../../form";
 
 const LoginSchema = Yup.object().shape({
 	email: Yup.string().email("Invalid email").required("Required!"),
@@ -61,34 +54,19 @@ export const LoginForm = () => {
 				<Form>
 					<Stack alignItems={"center"} gap={4}>
 						<Stack gap={2}>
-							<Field
-								variant="filled"
-								placeholder="Email"
-								size={"lg"}
-								as={Input}
+							<FormikField
 								name="email"
+								placeholder="Email"
+								error={errors.email}
+								touched={touched.email}
 							/>
-							{errors.email && touched.email ? (
-								<Text variant={"error"}>{errors.email}</Text>
-							) : null}
-							<InputGroup size={"lg"}>
-								<Field
-									pr="4.5rem"
-									variant="filled"
-									type={show ? "text" : "password"}
-									placeholder="Password"
-									as={Input}
-									name="password"
-								/>
-								<InputRightElement width="4.5rem">
-									<Button h="1.75rem" size="sm" onClick={handleClick}>
-										{show ? <HiEyeSlash /> : <HiEye />}
-									</Button>
-								</InputRightElement>
-							</InputGroup>
-							{errors.password && touched.password ? (
-								<Text variant={"error"}>{errors.password}</Text>
-							) : null}
+
+							<FormikPasswordField
+								name="password"
+								placeholder="Password"
+								error={errors.password}
+								touched={touched.password}
+							/>
 						</Stack>
 
 						<Button

@@ -1,10 +1,11 @@
-import { Button, Input, Stack, Text } from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
+import { Button, Stack, Text } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 
 import { useAppDispatch } from "../../../app/hooks";
 import { setUser } from "../../../features/auth/authSlice";
 import { useUpdateUserMutation } from "../../../lib/__generated__/graphql";
+import { FormikField } from "../../form";
 
 export const ProfileForm = () => {
 	const router = useRouter();
@@ -41,76 +42,47 @@ export const ProfileForm = () => {
 				});
 			}}
 		>
-			{({ touched, errors, isSubmitting }) => (
+			{({ touched, errors }) => (
 				<Form>
 					<Stack alignItems={"center"} gap={4}>
 						<Stack gap={2}>
-							<Field
-								variant="filled"
-								size={"lg"}
-								type="text"
+							<FormikField
 								name="username"
 								placeholder="Username"
-								as={Input}
+								error={errors.username}
+								touched={touched.username}
 							/>
-							{errors.username && touched.username ? (
-								<Text variant={"error"}>{errors.username}</Text>
-							) : null}
 
-							<Field
-								variant="filled"
-								size={"lg"}
-								type="text"
+							<FormikField
 								name="displayName"
 								placeholder="Display Name"
-								as={Input}
+								error={errors.displayName}
+								touched={touched.displayName}
 							/>
-							{errors.displayName && touched.displayName ? (
-								<Text variant={"error"}>{errors.displayName}</Text>
-							) : null}
 
-							<Field
-								variant="filled"
-								size={"lg"}
-								type="text"
+							<FormikField
 								name="bio"
 								placeholder="Bio"
-								as={Input}
+								error={errors.bio}
+								touched={touched.bio}
 							/>
-							{errors.bio && touched.bio ? (
-								<Text variant={"error"}>{errors.bio}</Text>
-							) : null}
 
-							<Field
-								variant="filled"
-								size={"lg"}
-								type="url"
+							<FormikField
 								name="websiteUrl"
 								placeholder="Website URL"
-								as={Input}
+								error={errors.websiteUrl}
+								touched={touched.websiteUrl}
 							/>
-							{errors.websiteUrl && touched.websiteUrl ? (
-								<Text variant={"error"}>{errors.websiteUrl}</Text>
-							) : null}
 
-							<Field
-								variant="filled"
-								size={"lg"}
-								type="url"
+							<FormikField
 								name="avatarUrl"
 								placeholder="Avatar URL"
-								as={Input}
+								error={errors.avatarUrl}
+								touched={touched.avatarUrl}
 							/>
-							{errors.avatarUrl && touched.avatarUrl ? (
-								<Text variant={"error"}>{errors.avatarUrl}</Text>
-							) : null}
 						</Stack>
 
-						<Button
-							colorScheme={"teal"}
-							type={"submit"}
-							isLoading={isSubmitting}
-						>
+						<Button colorScheme={"teal"} type={"submit"} isLoading={isLoading}>
 							Create Profile
 						</Button>
 						{error && !isLoading ? (
